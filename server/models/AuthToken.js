@@ -7,6 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
 
+  // set up the associations so we can make queries that include
+  // the related objects
   AuthToken.associate = function({ User }) {
     AuthToken.belongsTo(User);
   };

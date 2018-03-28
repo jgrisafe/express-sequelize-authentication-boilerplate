@@ -19,6 +19,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
 
+  // set up the associations so we can make queries that include
+  // the related objects
+  User.associate = function({ AuthToken }) {
+    User.hasMany(AuthToken);
+  };
 
   // in order to define an instance method, we have to access the User
   // model prototype. This can be found in the sequelize documentation
@@ -30,6 +35,24 @@ module.exports = (sequelize, DataTypes) => {
     const { token } = await AuthToken.generate(this.id)
 
     this.dataValues.token = token
+  }
+
+  User.prototype.logout = async function() {
+
+    let user = this
+
+    const { AuthToken } = sequelize.models
+
+    // if for some reason the developer forgot to include the AuthTokens with
+    // the user during the query, we can make sure they are retrieved before
+    // logging the user out
+    if (!user.AuthTokens) {
+      user = await User.findById(user.id, { include: AuthToken })
+    }
+
+    const authTokenIds = user.AuthTokens.map(token => token.id)
+
+    await AuthToken.destroy({ where: { id: authTokenIds }})
   }
 
   return User;
