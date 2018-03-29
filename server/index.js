@@ -27,14 +27,13 @@ app.use(userController);
 const db = require('./models/index');
 
 // sync our sequelize models and then start server
-db.sequelize.sync({ force: true }).then(() => {
+db.sequelize.sync().then(() => {
 
   // inside our db sync callback, we start the server.
   // this is our way of making sure the server is not listening
   // to requests if we have not made a db connection
-  console.log(db.models) // eslint-disable-line no-console
   app.listen(PORT, () => {
-
     console.log(`App listening on PORT ${PORT}`);
   });
+
 });
