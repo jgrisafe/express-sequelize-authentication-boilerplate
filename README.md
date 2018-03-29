@@ -1,4 +1,4 @@
-##Sequelize Authentication Tutorial
+## Sequelize Authentication Tutorial
 
 To get started:
 - npm install
