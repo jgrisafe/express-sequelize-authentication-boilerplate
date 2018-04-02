@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const cookieParser = require('cookie-parser');
+const customAuthMiddleware = require('./middleware/custom-auth-middleware');
 
 // controllers
 const userController = require('./controllers/user-controller')
@@ -15,6 +17,10 @@ const PORT = process.env.PORT || 8080;
 // Express middleware that allows POSTing data
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// use the cookie-parser to help with auth token
+app.use(cookieParser());
+app.use(customAuthMiddleware);
 
 // serve up the public folder so we can request static
 // assets from our html document
