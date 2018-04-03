@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "root",
+    "password": "",
     "database": "custom_auth_tutorial",
     "host": "127.0.0.1",
     "dialect": "mysql"

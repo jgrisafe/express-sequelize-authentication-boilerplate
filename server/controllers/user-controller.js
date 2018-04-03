@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 
 // grab the User model from the models folder, the sequelize
@@ -22,17 +23,18 @@ router.post('/register', (req, res) => {
       // send back the new user and auth token to the client
       res.json(user)
     })
-    .catch(err => { res.send(err.errors) })
-})
+    .catch((err) => { res.send(err.errors); });
+});
 
 /* Login Route
 ========================================================= */
 router.post('/login', (req, res) => {
-  const { username, password } = req.body
+  const { username, password } = req.body;
 
   // if the username / password is missing, we use status code 400
   // indicating a bad request was made and send back a message
   if (!username || !password) {
+<<<<<<< HEAD
     return res.status(400).send('Request missing username or password param')
   }
 
@@ -41,17 +43,17 @@ router.post('/login', (req, res) => {
   // to give it a fresh auth token and send it back
   User.findOne({ where: { username, password }})
     .then(async (user) => {
-      if (!user) { res.status(404).send('User not found.')}
-      await user.authorize()
-      res.json(user)
+      if (!user) { res.status(404).send('User not found.'); }
+      await user.authorize();
+      res.json(user);
     })
-    .catch(err => { res.send(err.errors) })
-})
+    .catch((err) => { res.send(err.errors); });
+});
 
 /* Logout Route
 ========================================================= */
 router.delete('/logout', (req, res) => {
-  const { username } = req.body
+  const { username } = req.body;
 
   // if the username missing, we use status code 400
   // indicating a bad request was made and send back a message
@@ -67,12 +69,19 @@ router.delete('/logout', (req, res) => {
   // this method as needed
   User.findOne({ where: { username }})
     .then(async (user) => {
-      if (!user) { res.status(404).send('User not found.')}
-      await user.logout()
-      res.json(user)
+      if (!user) { res.status(404).send('User not found.'); }
+      await user.logout();
+      res.json(user);
     })
-    .catch(err => { res.send(err.errors) })
-})
+    .catch((err) => { res.send(err.errors); });
+});
+
+router.get('/me', (req, res) => {
+  if (req.user) {
+    return res.send(req.user);
+  }
+  res.status(404).send({ errors: [{ message: 'user not found' }] });
+});
 
 // export the router so we can pass the routes to our server
 module.exports = router;
