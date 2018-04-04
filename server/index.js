@@ -51,7 +51,7 @@ const db = require('./models/index');
 db.sequelize.sync().then(() => {
   // inside our db sync callback, we start the server.
   // this is our way of making sure the server is not listening
-  // to requests if we have not made a db connection
+  // to requests if we have not yet made a db connection
   app.listen(PORT, () => {
     console.log(`App listening on PORT ${PORT}`);
   });
