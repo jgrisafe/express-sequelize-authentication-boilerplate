@@ -32,7 +32,7 @@ router.post('/login', (req, res) => {
 });
 
 router.delete('/logout', (req, res) => {
-  const { username } = req.body;
+  const { username } = req.user;
 
   // if the username missing, we use the status code 400
   // indicating a bad request was made and send back a message
@@ -40,7 +40,7 @@ router.delete('/logout', (req, res) => {
     return res.status(400).send('Missing username or password');
   }
 
-  User.findOne({ where: { username } })
+  return User.findOne({ where: { username } })
     .then(async (user) => {
       if (!user) { res.status(404).send('User not found.'); }
       await user.logout();
@@ -53,7 +53,7 @@ router.get('/me', (req, res) => {
   if (req.user) {
     return res.send(req.user);
   }
-  res.status(404).send({ errors: [{ message: 'user not found' }] });
+  res.status(404).send({ errors: [{ message: 'missing auth token' }] });
 });
 
 module.exports = router;
