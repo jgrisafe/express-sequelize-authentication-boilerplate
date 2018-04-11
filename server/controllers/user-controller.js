@@ -5,7 +5,7 @@ const router = express.Router();
 // grab the User model from the models folder, the sequelize
 // index.js file takes care of the exporting for us and the
 // syntax below is called destructuring, its an es6 feature
-const { User } = require('../models');
+const { User, AuthToken } = require('../models');
 
 /* Register Route
 ========================================================= */
