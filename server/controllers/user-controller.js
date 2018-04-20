@@ -51,28 +51,19 @@ router.post('/login', (req, res) => {
 
 /* Logout Route
 ========================================================= */
-router.delete('/logout', (req, res) => {
-  const { username } = req.user;
+router.delete('/logout', async (req, res) => {
 
-  // if the username missing, we use status code 400
+  // because the logout request needs to be send with authorization
+  // we should have access to the user on the req object, so we will
+  // try to find it and call the model method logout
+  if (req.user) {
+    await req.user.logout();
+    return res.status(204).send()
+  };
+
+  // if the user missing, we use status code 400
   // indicating a bad request was made and send back a message
-  if (!username) {
-    return res.status(400).send('Request Missing username param');
-  }
-
-  // try to find a user with the same username
-  // as sent by the request body. If it's found we are going
-  // to delete the associated auth tokens so that this user
-  // is completely logged out of all devices. Sometimes this
-  // might not be the desired functionality so you can adjust
-  // this method as needed
-  User.findOne({ where: { username } })
-    .then(async (user) => {
-      if (!user) { res.status(404).send('User not found.'); }
-      await user.logout();
-      res.json(user);
-    })
-    .catch((err) => { res.send(err.errors); });
+  return res.status(400).send('Request Missing username param');
 });
 
 router.get('/me', (req, res) => {
