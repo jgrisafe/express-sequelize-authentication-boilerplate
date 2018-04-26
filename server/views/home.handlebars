@@ -78,9 +78,13 @@
         password: $('[name="password"]').val()
       }
     }).then(user => {
-      $.cookie('auth_token', user.token, { expires: 7 });
-      window.location = '/'
-    })
+      if (user.token) {
+        $.cookie('auth_token', user.token, { expires: 7 });
+        window.location = '/'
+      } else {
+        throw new Error('something went wrong')
+      }
+    }).fail((err) => alert(err.responseText))
   }
 
   function logout(e) {

@@ -16,6 +16,7 @@
   "author": "your name <your_email@domain.com",
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^2.0.0",
     "body-parser": "^1.15.2",
     "cookie-parser": "^1.4.3",
     "dotenv": "^5.0.1",

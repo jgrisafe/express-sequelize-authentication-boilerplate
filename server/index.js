@@ -15,7 +15,7 @@ const clientDir = path.join(__dirname, '../client');
 
 // set up the Express App
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3000;
 
 // Express middleware that allows POSTing data
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -35,8 +35,7 @@ app.set('views', path.join(__dirname, '/views'));
 app.engine('handlebars', exphbs({
   defaultLayout: 'main',
   extname: '.handlebars',
-  layoutsDir: 'server/views/layouts',
-  partialsDir: 'server/views/partials',
+  layoutsDir: 'server/views/layouts'
 }));
 app.set('view engine', 'handlebars');
 

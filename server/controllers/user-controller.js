@@ -1,19 +1,23 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
 
 const router = express.Router();
 
 // grab the User model from the models folder, the sequelize
 // index.js file takes care of the exporting for us and the
 // syntax below is called destructuring, its an es6 feature
-const { User, AuthToken } = require('../models');
+const { User } = require('../models');
 
 /* Register Route
 ========================================================= */
 router.post('/register', (req, res) => {
-  // create a user with the sequelize create method, passing it
-  // the request body, which should contain the username,
-  // email, and password
-  User.create({ ...req.body })
+
+  // hash the password provided by the user with bcrypt so that
+  // we are never storing plain text passwords. This is crucial
+  // for keeping your db clean of sensitive data
+  const hash = bcrypt.hashSync(req.body.password, 10);
+
+  User.create(Object.assign(req.body, { password: hash }))
 
     // we use an async function here so that we can wait on the
     // auth token generation with user.authorize()
@@ -23,7 +27,7 @@ router.post('/register', (req, res) => {
       // send back the new user and auth token to the client
       res.json(user);
     })
-    .catch((err) => { res.send(err.errors); });
+    .catch((err) => { res.status(400).send(err.errors[0].message); });
 });
 
 /* Login Route
@@ -37,16 +41,14 @@ router.post('/login', (req, res) => {
     return res.status(400).send('Request missing username or password param');
   }
 
-  // try to find a user with the same username and password
-  // as sent by the request body. If it's found we are going
-  // to give it a fresh auth token and send it back
-  User.findOne({ where: { username, password } })
+  User.authenticate(username, password)
     .then(async (user) => {
       if (!user) { res.status(404).send('User not found.'); }
       await user.authorize();
       res.json(user);
     })
     .catch((err) => { res.send(err.errors); });
+
 });
 
 /* Logout Route
@@ -63,7 +65,7 @@ router.delete('/logout', async (req, res) => {
 
   // if the user missing, we use status code 400
   // indicating a bad request was made and send back a message
-  return res.status(400).send('Request Missing username param');
+  return res.status(400).send({ errors: [{ message: 'request Missing username param' }] });
 });
 
 router.get('/me', (req, res) => {

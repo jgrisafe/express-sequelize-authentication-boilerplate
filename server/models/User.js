@@ -1,4 +1,5 @@
 const db = require('./');
+const bcrypt = require('bcrypt');
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
@@ -15,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+      length: 1000
     },
   });
 
@@ -34,6 +36,17 @@ module.exports = (sequelize, DataTypes) => {
 
     this.dataValues.token = token;
   };
+
+  User.authenticate = async function(username, password) {
+
+    const user = await User.findOne({ where: { username } });
+
+    if (bcrypt.compareSync(password, user.password)) {
+      return user;
+    }
+
+    return null;
+  }
 
   User.prototype.logout = async function () {
     let user = this;
