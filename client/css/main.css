@@ -46,6 +46,9 @@ input + input, .form .buttons {
   background: #f1f1f1;
   color: #000;
   text-align: center;
+  border: none;
+  box-shadow: none;
+  font-size: 16px;
 }
 
 .button + .button {

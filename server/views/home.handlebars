@@ -1,5 +1,5 @@
 <h1>Custom Auth Tutorial</h1>
-
+<form>
   {{#if user}}
     <div class="form login-form">
       <p>Logged in as <strong>{{user.username}}</strong></p>
@@ -12,7 +12,7 @@
       <input type="text" name="username" placeholder="username">
       <input type="text" name="password" placeholder="password">
       <div class="buttons">
-        <a class="button login" href="/">Login</a>
+        <button class="button login">Login</button>
         <a class="button signup" href="/register">Signup</a>
       </div>
     </div>
@@ -22,11 +22,11 @@
       <input type="text" name="password" placeholder="password">
       <div class="buttons">
         <a class="button login" href="/">Login</a>
-        <a class="button signup" href="/register">Signup</a>
+        <button class="button signup">Signup</button>
       </div>
     </div>
   {{/if}}
-
+</form>
 <script>
 
   $(function() {
