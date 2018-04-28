@@ -6,7 +6,6 @@ router.get('/', (req, res) => {
 
   console.log(req.cookies) // eslint-disable-line no-console
   res.render('home', { user: req.user })
-  // res.send('hllo')
 });
 router.get('/register', (req, res) => res.render('home', { user: req.user }));
 
