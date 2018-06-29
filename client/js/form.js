@@ -3,10 +3,12 @@ $(function() {
     $('.signup-form').remove()
     $('.login').on('click', login);
   }
+
   if (window.location.pathname === '/register') {
     $('.login-form').remove()
     $('.signup').on('click', signup);
   }
+
   if ($('.logout').length) {
     $('.logout').on('click', logout);
   }
@@ -30,10 +32,11 @@ function login(e) {
       username: $('[name="username"]').val(),
       password: $('[name="password"]').val()
     }
-  }).done(user => {
-    $.cookie('auth_token', user.token, { expires: 7 });
+  }).then(({ user, authToken }) => {
+    $.cookie('auth_token', authToken.token, { expires: 7 });
+    if (!user) throw new Error('invalid username or password');
     window.location.reload()
-  }).fail((err) => alert(err.responseText))
+  }).catch((err) => alert(err.responseText))
 }
 
 function signup(e) {
@@ -46,14 +49,14 @@ function signup(e) {
       email: $('[name="email"]').val(),
       password: $('[name="password"]').val()
     }
-  }).then(user => {
-    if (user.token) {
-      $.cookie('auth_token', user.token, { expires: 7 });
+  }).then(({ user, authToken }) => {
+    if (user && authToken.token) {
+      $.cookie('auth_token', authToken.token, { expires: 7 });
       window.location = '/'
     } else {
       throw new Error('something went wrong')
     }
-  }).fail((err) => alert(err.responseText))
+  }).catch((err) => alert(err.responseText))
 }
 
 function logout(e) {

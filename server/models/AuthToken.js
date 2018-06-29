@@ -16,8 +16,12 @@ module.exports = (sequelize, DataTypes) => {
   // generates a random 15 character token and
   // associates it with a user
   AuthToken.generate = async function(UserId) {
-    if (!UserId) { throw new Error('AuthToken requires a user ID') }
+    if (!UserId) {
+      throw new Error('AuthToken requires a user ID')
+    }
+
     let token = '';
+
     const possibleCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
       'abcdefghijklmnopqrstuvwxyz0123456789';
 
@@ -27,9 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       );
     }
 
-    const authToken = await AuthToken.create({ token, UserId })
-
-    return authToken.dataValues
+    return AuthToken.create({ token, UserId })
   }
 
   return AuthToken;
