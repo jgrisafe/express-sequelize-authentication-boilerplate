@@ -5,7 +5,7 @@ To get started:
 - npm install
 - npm start
 
-#Screen Shots
+# Screen Shots
 
 ## login page
 ![login image](./images/login.png)
