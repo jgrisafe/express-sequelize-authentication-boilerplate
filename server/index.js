@@ -21,8 +21,8 @@ const PORT = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// use the cookie-parser to help with auth token, it must come before
-// the customAuthMiddleware
+// use the cookie-parser to help with auth token,
+// it must come before the customAuthMiddleware
 app.use(cookieParser());
 app.use(customAuthMiddleware);
 
